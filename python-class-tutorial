@@ -1,0 +1,21 @@
+# Python Class - Basic Notation
+---EXAMPLE---
+
+class myClass:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        
+    def show_age(self):
+        return self.age
+        
+    def show_name(self):
+        return self.name
+        
+ 
+#Object creation
+obj = myClass('George', 20)
+
+#Accessing methods
+obj.show_age()
+obj.show_name()
