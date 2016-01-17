@@ -1,0 +1,113 @@
+import Tkinter as tk
+import tkMessageBox as mbx
+from ttk import *
+
+class Bank:
+    def __init__(self, window):
+        self.credits = 100000
+        #Column 1 - Setup
+        self.Client = tk.Label(window, text='Client Details', width='20').grid(row=1, column=1)
+        self.Title = tk.Label(window, text='eBanking App', width='20').grid(row=1,column=2)
+        self.Stats = tk.Label(window, text='eBanking Stats', width='20').grid(row=1,column=3)
+        self.eNumber = tk.Label(window, text='E-Bank ID: 000034\n948-342',width='20').grid(row=2, column=1)
+
+        """Transfers"""
+        self.transfer = tk.IntVar()
+        self.clientNum = tk.IntVar()
+        
+        self.trLabel = tk.Label(window, text='Amount').grid(row=4, column=1)
+        self.trCredits = tk.Entry(window, textvariable=self.transfer, width='18').grid(row=5, column=1)
+
+        self.trLabel2 = tk.Label(window, text='Destination ID').grid(row=6, column=1)
+        self.DestNum = tk.Entry(window, textvariable=self.clientNum, width='18').grid(row=7, column=1)
+        self.trButton = tk.Button(window, text='Transfer', command=self.trAmount, width='15').grid(row=8, column=1)
+        
+        #Column 2 - Operations
+        """Deposits"""
+        self.amountD = tk.IntVar()
+        self.DepLabel = tk.Label(window, text='Deposit Amount').grid(row=2, column=2)
+        self.addCredits = tk.Entry(window, textvariable=self.amountD, width='18').grid(row=3, column=2)
+        self.DepButton = tk.Button(window, text='Deposit', command=self.depositAmount, width='15').grid(row=4, column=2)
+
+        """Withdraws"""
+        self.amountW = tk.IntVar()
+        self.withLabel = tk.Label(window, text='Withdraw Amount').grid(row=5, column=2)
+        self.withCredits = tk.Entry(window, textvariable=self.amountW, width='18').grid(row=6, column=2)
+        self.withButton = tk.Button(window, text='Withdraw', command=self.withAmount, width='15').grid(row=7, column=2)
+
+        """Balance"""
+        self.info = tk.Button(window, text='Balance', command=self.showBalance, width='15').grid(row=8, column=2)
+
+        """Reset all"""
+        self.resetAll = tk.Button(window, text='Reset', command=self.clearAll, width='15').grid(row=2,column=3)
+
+    def depositAmount(self):
+        amount = self.amountD.get()
+        if amount <= 0:
+            mbx.showwarning(title='Error', message="The amount you entered is not valid")
+        else:
+            self.credits += amount
+            mbx.showinfo(title='Amount Deposit', message="The amount you entered was inserted.")
+            self.amountD.set(0)
+            
+            
+    def withAmount(self):
+        amount = self.amountW.get()
+        if amount <= 0:
+            mbx.showwarning(title='Error', message="The amount you entered is not valid")
+        else:
+            if amount < self.credits:
+                self.credits -= amount
+                mbx.showinfo(title='Amount Deposit', message="The amount you entered was removed.")
+                self.amountW.set(0)
+            else:
+                mbx.showinfo(title='Amount Deposit', message="Wrong amount. Try again and check your balance.")
+                self.amountW.set(0)
+                
+                
+
+    def showBalance(self):
+         mbx.showinfo(title='Balance', message="Account Balance: "+str(self.credits)+" ")
+
+
+    def clear(self):
+        self.transfer.set(0)
+        self.clientNum.set(0)
+
+    def clearAll(self):
+        if mbx.askyesno(title='Confirm', message='Are you sure that you\nwant to delete all entries?') == True:
+            self.transfer.set(0)
+            self.clientNum.set(0)
+            self.amountW.set(0)
+            self.amountD.set(0)
+            mbx.showinfo(title='Reset', message="Entries cleared.")
+        else:
+            mbx.showinfo(title='Reset', message="Operation cancelled.")
+
+
+    def trAmount(self):
+        amount = self.transfer.get()
+        to = self.clientNum.get()
+        if amount > 0 and to > 0:
+            if mbx.askyesno(title='Confirm', message='Are you sure?') == True:
+                if self.credits >= amount:
+                    self.credits -= amount
+                    mbx.showinfo(title='Transfer', message="The amount "+str(amount)+" was transfered.")
+                    self.clear()
+                else:
+                    mbx.showinfo(title='Transfer', message="Not enough credits to complete the transfer.")
+                    self.clear()
+            else:
+                mbx.showwarning(title='Transfer', message="Operation cancelled by the user")
+                self.clear()
+                 
+        else:
+            mbx.showwarning(title='Transfer', message="The amount you entered is not valid")
+            self.clear()
+
+
+root = tk.Tk()
+obj = Bank(root)
+root.title("eBanking Application")
+root.resizable(0,0)
+root.mainloop()
