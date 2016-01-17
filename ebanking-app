@@ -40,7 +40,12 @@ class Bank:
 
         """Reset all"""
         self.resetAll = tk.Button(window, text='Reset', command=self.clearAll, width='15').grid(row=2,column=3)
-
+   
+        """Text Stats"""
+        self.historyLabel = tk.Label(window, text='History').grid(row=3, column=3)
+        self.history = tk.Text(window, width='20', height='4').grid(row=4, column=3)
+        
+        
     def depositAmount(self):
         amount = self.amountD.get()
         if amount <= 0:
