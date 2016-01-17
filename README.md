@@ -1,4 +1,4 @@
-# PythonGeek
+#Lab
 <h3><font style='color:skyblue;'>Python</font> and <font style='color:purple;'>Web Development</font> Geek</h3>
 <hr>
 <p>I'm passionate about programming, mathematics (mostly integrals & differential equations) and physics. 
