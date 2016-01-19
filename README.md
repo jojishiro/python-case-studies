@@ -1,5 +1,6 @@
-#Lab
-<h3><font style='color:skyblue;'>Python</font> and <font style='color:purple;'>Web Development</font> Geek</h3>
+
+<img src='https://etopian.com/wp-content/uploads/icon_python.png' style='width:32px;height:32px;vertical-align:middle;
+margin-right:10px;'/><font style='color:skyblue;'>PythonLab</font>
 <hr>
 <p>I'm passionate about programming, mathematics (mostly integrals & differential equations) and physics. 
 I enjoy taking online courses and when I'm not in my computer I usually heading out for sports. From now on, any project I'm
