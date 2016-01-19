@@ -1,3 +1,5 @@
 #PythonLab 
 Python major and 'niche' projects
-<hr>
+http://ksofware.eu
+http://pythonside.eu
+
