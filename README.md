@@ -1,5 +1,5 @@
 
-<img src='https://etopian.com/wp-content/uploads/icon_python.png' width='32px' height='32px'/><font style='color:skyblue;'>PythonLab</font>
+<img src='https://etopian.com/wp-content/uploads/icon_python.png' width='50px' height='50px' style='vertical-align:middle;'/><font style='color:skyblue;'>PythonLab</font>
 <hr>
 <p>I'm passionate about programming, mathematics (mostly integrals & differential equations) and physics. 
 I enjoy taking online courses and when I'm not in my computer I usually heading out for sports. From now on, any project I'm
