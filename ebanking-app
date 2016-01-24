@@ -1,8 +1,21 @@
+#Python 2.7
 from Tkinter import *
 import tkMessageBox as mbx
-from ttk import *
+from ttk import * #Extra library for HD graphics (often used with Tkinter)
+
+"""
+An application made for the 
+management of your bank or any account.
+I'm using a fixed amount of 100,000 for
+the three most basic operations
+(Deposit, Withdraw, Transfer).
+"""
 
 class Bank:
+    """
+    Basic Setup of the
+    environment and child objects
+    """
     def __init__(self, window):
         self.credits = 100000
         self.log = []
@@ -13,7 +26,9 @@ class Bank:
         self.Stats = Label(window, text='eBanking Stats', width='20').grid(row=1,column=3)
         self.eNumber = Label(window, text='E-Bank ID: 000034\n948-342',width='20').grid(row=2, column=1)
 
-        """Transfers"""
+        """
+        Transfers
+        """
         self.transfer = IntVar()
         self.clientNum = IntVar()
         
@@ -25,31 +40,48 @@ class Bank:
         self.trButton = Button(window, text='Transfer', command=self.trAmount, width='15').grid(row=8, column=1)
         
         #Column 2 - Operations
-        """Deposits"""
+        """
+        Deposits
+        """
         self.amountD = IntVar()
         self.DepLabel = Label(window, text='Deposit Amount').grid(row=2, column=2)
         self.addCredits = Entry(window, textvariable=self.amountD, width='18').grid(row=3, column=2)
         self.DepButton = Button(window, text='Deposit', command=self.depositAmount, width='15').grid(row=4, column=2)
 
-        """Withdraws"""
+        """
+        Withdraws
+        """
         self.amountW = IntVar()
         self.withLabel = Label(window, text='Withdraw Amount').grid(row=5, column=2)
         self.withCredits = Entry(window, textvariable=self.amountW, width='18').grid(row=6, column=2)
         self.withButton = Button(window, text='Withdraw', command=self.withAmount, width='15').grid(row=7, column=2)
 
-        """Balance"""
+        """
+        Balance
+        """
         self.info = Button(window, text='Balance', command=self.showBalance, width='15').grid(row=8, column=2)
 
         #Column 3 - Stats
-        """Reset all"""
+        """
+        Reset all
+        """
         self.resetAll = Button(window, text='Reset', command=self.clearAll, width='15').grid(row=2,column=3)
 
-        """Log Stats"""
+        """
+        Log Stats
+        """
         self.tLabel = Label(window, text='Log Info').grid(row=3, column=3)
         self.text = Button(window, width='15', text='Show Log', command=self.showLog).grid(row=4, column=3)
 
 
     def showLog(self):
+        
+        """
+        A universal counter which
+        updates the log list when each
+        of these actions occur.
+        """
+        
         ers, dep, wt, trs = 0, 0, 0, 0
         for element in self.log:
             if element == 'Error':
@@ -66,6 +98,14 @@ class Bank:
 
 
     def depositAmount(self):
+        
+        """
+        Making deposits. The .get() method retrieves
+        the value from the entry box, checks if it's valid
+        and adds the number into the credits variable with
+        some numerical operation.
+        """
+        
         amount = self.amountD.get()
         if amount <= 0:
             mbx.showwarning(title='Error', message="The amount you entered is not valid")
@@ -79,6 +119,13 @@ class Bank:
 
             
     def withAmount(self):
+
+        """
+        The Withdraw operation is exacly the same as the
+        deposit function from above. Instead of adding, we
+        substracting from the credits var if the condition occur.
+        """
+        
         amount = self.amountW.get()
         if amount <= 0:
             mbx.showwarning(title='Error', message="The amount you entered is not valid")
@@ -97,15 +144,32 @@ class Bank:
                 
 
     def showBalance(self):
+
+         """
+         A brief report of the credits variable
+         using a dialog.
+         """
+
          mbx.showinfo(title='Balance', message="Account Balance: "+str(self.credits)+" ")
          self.log.append("Preview")
 
 
     def clear(self):
+
+        """
+        Setting some variables back to 0.
+        Crears the transfer's section entries.
+        """
         self.transfer.set(0)
         self.clientNum.set(0)
 
     def clearAll(self):
+
+        """
+        Clears all the entries of the app
+        with a dialog confirmation.
+        """
+        
         if mbx.askyesno(title='Confirm', message='Are you sure that you\nwant to delete all entries?') == True:
             self.transfer.set(0)
             self.clientNum.set(0)
@@ -119,6 +183,12 @@ class Bank:
 
 
     def trAmount(self):
+
+        """
+        Transfering credits. This function retrieves
+        the amount and the destination id from the corresponding entries,
+        
+        """
         amount = self.transfer.get()
         to = self.clientNum.get()
         if amount > 0 and to > 0:
