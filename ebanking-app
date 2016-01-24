@@ -12,10 +12,12 @@ the three most basic operations
 """
 
 class Bank:
+
     """
     Basic Setup of the
     environment and child objects
     """
+    
     def __init__(self, window):
         self.credits = 100000
         self.log = []
