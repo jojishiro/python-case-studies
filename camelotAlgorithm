@@ -1,5 +1,3 @@
-//Coded by George Zafiris
-
 import random
 
 class camelot:
@@ -41,3 +39,5 @@ while True:
 
         print "Request status: " + str(shield.get(knight.name)) 
 
+<hr>
+Copyright 2016 - George Zafiris 
