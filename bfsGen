@@ -1,0 +1,44 @@
+from collections import deque
+import os, json
+
+def bfs(g, start):
+    queue, enqueued = deque([(None, start)]), set([start])
+    while queue:
+        # use of popleft function
+        parent, n = queue.popleft()
+        # generator
+        yield parent, n
+        new = set(g[n]) - enqueued
+        # binary OR for with the new set
+        enqueued |= new
+        # add to queue 
+        queue.extend([(n, child) for child in new])
+
+
+while True:
+        # console panel for user
+        choice = raw_input('Read from file graph.dat? Y/N -> ')
+        if choice == 'Y' or choice == 'y':
+
+            # a sample graph
+            g = { 'A': ['B', 'C','E'],'B': ['A','C', 'D'],
+                  'C': ['D'],'D': ['C'],'E': ['F', 'D'],'F': ['C']}
+
+            # if file exists read its graph
+            if os.path.exists('graph.dat'):
+                graph = eval(open('graph.dat', 'r').read())
+            else:
+                # if there is no file, create new and insert sample graph
+                # dump with json pkg
+                json.dump(g, open('graph.dat','w'))
+                # fetch graph
+                graph = eval(open('graph.dat', 'r').read())
+
+            # run bfs and print in list format
+            print list(bfs(graph, 'A'))
+        elif choice == 'N' or choice == 'n':
+            break       
+        else:
+            print 'Try again.'
+    
+        
