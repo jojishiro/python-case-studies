@@ -1,0 +1,38 @@
+import os, json
+
+g = {'A': {"B": 85, 'D': 80, 'G' :90}, # A can direct to B, D and G
+    'B': {'F' : 79},
+    'F':{'C':69,'D':40},
+    'C':{'D':86,'H':65,'F':45},
+    'D':{'G':87},
+    'G':{'A':69},
+    'E':{'G':32,'B':12},
+    'H':{}}
+
+while True:
+    if not os.path.exists('graph.dat'):
+        # Insert a random graph if there is no file
+        json.dump(g, open('graph.dat','w'))
+        graph = eval(open('graph.dat', 'r').read())
+        print 'File created...'
+        print 'Graph loaded successfully...'
+        print 'Loaded graph -> '+str(graph)
+    else:
+        graph = eval(open('graph.dat', 'r').read())
+        print 'Graph loaded successfully...'
+        print 'Loaded graph -> '+str(graph)
+
+    choice = raw_input('Find shortest paths(Y/N/Reload Graph)-> ')
+    if choice == 'y' or choice == 'Y':
+        for fromNode in graph:
+            neighbors = graph[fromNode]
+            for toNode in neighbors:
+                distance = neighbors[toNode]
+                print("%s -> %s (%d)" % (fromNode, toNode, distance))
+    elif choice == 'N' or choice == 'n':
+        break
+    elif choice == 'R' or choice == 'r':
+        print "New graph found"
+    else:
+        print 'Try again.'
+    
