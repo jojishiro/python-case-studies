@@ -11,19 +11,23 @@ class App:
         """
         self.arr = []
         self.fileArr = []
-
+        
         """
         File manipulation
         """
         if not os.path.exists('data.txt'):
             open('data.txt','a')
+             
+        def convertToInt(inp):
+            numerals="0123456789abcdefghijklmnopqrstuvwxyz"
+            return sum(numerals.index(x)*36**i for i,x in enumerate(inp[::-1]))
 
         """ Read and generate a list from file """
         with open('data.txt','r') as f:
             line = f.readline()
             line = line.split(',')
             for i in line:
-                self.fileArr.append(int(i))
+                self.fileArr.append(convertToInt(i))
        
         """
         Main GUI
@@ -115,7 +119,8 @@ class App:
             self.unsortedBox.insert(0,str(self.arr)) 
         else:
             tk.showinfo('Report','Try again')
-   
+        
+        
 
     """
     Sorting Algorithms
@@ -139,6 +144,8 @@ class App:
         # Add to sorted listbox
         self.sortedBox.insert(0,str(self.arr)+' BubbleSort')
         print arr
+        
+        
         
     def insertionSort(self):
         arr = self.arr
@@ -197,5 +204,4 @@ obj = App(app)
 app.resizable(0,0)
 app.title('AlgoAnalysis - G.Z - TEIWEST - 2721')
 app.mainloop()
-
 
