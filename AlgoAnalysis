@@ -11,13 +11,18 @@ class App:
         """
         self.arr = []
         self.fileArr = []
-        
+
+        self.samp = '3,4,5,6,5,3,2,3,4,5,45,54,65'
         """
         File manipulation
         """
         if not os.path.exists('data.txt'):
-            open('data.txt','a')
-             
+            with open('data.txt','w') as f:
+                f.write(self.samp)
+            f.close()
+            
+        # Convert string to int 
+        # Ints may change during conversion process
         def convertToInt(inp):
             numerals="0123456789abcdefghijklmnopqrstuvwxyz"
             return sum(numerals.index(x)*36**i for i,x in enumerate(inp[::-1]))
