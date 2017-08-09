@@ -1,0 +1,225 @@
+from Tkinter import *
+from ScrolledText import ScrolledText
+import tkMessageBox as msg
+import os, numbers
+import locale
+locale.getdefaultlocale()[1]
+import json, urllib
+
+
+class text_py:
+   
+    def __init__(self, env):  
+        
+         
+        self.file_name = StringVar()
+        # Main editor
+        self.title = Label(env, bg='black', fg='white', text='BishopIDE - KSoftware.eu', font=('Calibri',10)).place(x=32, y=32)
+        self.save_file_name = Label(env, bg='black', fg='white', text='Filename...', font=('Calibri',10)).place(x=725, y=32)
+        self.content = ScrolledText(env, borderwidth=2, relief='sunken', insertbackground='grey', bg='black',
+                                    fg='white', font=('Verdana', 10),height=35)
+        self.content.place(x=32, y=64)
+
+        # Operations
+        self.text_name = Entry(env, textvariable=self.file_name, width=31, bg='black', fg='white')
+        self.text_name.place(x=725, y=64)
+        self.save_button = Button(env, fg='grey', bg='black',text='Save',command=self.save_file,width=30).place(x=725, y=96)
+        self.fast_save = Button(env, fg='grey',bg='black',text='Open', command=self.open_file,width=30).place(x=725, y=128)
+        self.new_file = Button(env, fg='grey', bg='black',text='New', command=self.create_new,width=30).place(x=725, y=160)
+
+        # Template Triggers
+        self.html_template = Button(env, fg='grey', bg='black',text='HTML Template', command=lambda:self.add_template('HTML'), width=30)
+        self.html_template.place(x=725, y=192)
+
+        self.php_template = Button(env,fg='grey', bg='black', text='PHP Template', command=lambda:self.add_template('PHP'), width=30)
+        self.php_template.place(x=725, y=224)
+
+        self.jquery_template = Button(env,fg='grey', bg='black',text='jQuery Template', command=lambda:self.add_template('JQUERY'), width=30)
+        self.jquery_template.place(x=725, y=256)
+
+        self.c_template = Button(env,fg='grey', bg='black', text='C Template', command=lambda:self.add_template('C'), width=30)
+        self.c_template.place(x=725, y=288)
+
+        self.c_plusplus_template = Button(env,fg='grey', bg='black', text='C++ Template', command=lambda:self.add_template('C++'), width=30)
+        self.c_plusplus_template.place(x=725, y=320)
+
+        self.java_template = Button(env,fg='grey', bg='black', text='Java Template', command=lambda:self.add_template('JAVA'), width=30)
+        self.java_template.place(x=725, y=352)
+
+        # Mini calculator
+        self.calc_text = StringVar()
+        self.calc_label = Label(env, fg='grey',  bg='black', text='BCalc').place(x=725, y=384)
+        self.calc_input = Entry(env, fg='grey', bg='black',textvariable=self.calc_text, width=31)
+        self.calc_input.place(x=725, y=406)
+        
+        self.result = Button(env, fg='grey', bg='black', text='=', command=self.solve, width=30).place(x=725, y=438)
+        self.del_button = Button(env, fg='grey', bg='black', text='Clear', command=lambda: self.calc_input.delete(0,END), width=30).place(x=725, y=470)
+
+        # Fetch website
+
+        self.link = StringVar()
+        self.link_label = Label(env,fg='grey', bg='black',text='Enter website address').place(x=725, y=502)
+        self.link_entry = Entry(env, fg='grey', bg='black', textvariable=self.link, width=31)
+        self.link_entry.place(x=725, y=526)
+
+        self.load = Button(env, fg='grey', bg='black', text='Fetch', width=30, command=self.get_url)
+        self.load.place(x=725, y=558)
+        
+
+    def get_url(self):
+        safe = 'https://'
+        not_safe = 'http://'
+        search = self.link.get()
+        if search != '' or len(search) > 5:
+            try:
+                if safe or not_safe in search:
+                    raw_data = urllib.urlopen(str(search)).read()
+                    if raw_data != None:
+                        self.content.delete(1.0,END)
+                        self.content.insert(END,raw_data)
+                        self.link_entry.delete(0,END)
+                    else:
+                        msg.showinfo('Web Reference','Undefined location. Try again.')  
+                        self.link_entry.delete(0,END)
+                else:
+                    self.link_entry.delete(0,END)
+            except IOError:
+                msg.showinfo('Web Reference','Try another location.')
+                self.link_entry.delete(0,END)
+        else:
+            msg.showinfo('Web Reference','Error link location')     
+            self.link_entry.delete(0,END)
+            
+        
+    
+
+    def solve(self):
+        alphaL = 'abcdefghijklmnopqrstuvwxyz'
+        alphaU = alphaL.upper()
+        value = self.calc_text.get()
+        if value == '' or value == 0 or len(value) < 3:
+            self.calc_input.delete(0,END)
+            msg.showinfo('Calc Message', 'Invalid input')          
+        result = eval(str(value))
+        if isinstance(result, numbers.Number):
+            self.calc_input.delete(0,END)
+            self.calc_input.insert(END, result)
+        if not isinstance(result, numbers.Number):
+            self.calc_input.delete(0,END)
+            msg.showinfo('Calc Message', 'Invalid phrase')
+
+
+
+    def open_file(self):
+        from tkFileDialog import askopenfilename
+        import ntpath
+        self.file_name = askopenfilename()
+        with open(str(self.file_name), 'r') as f:
+            content = f.readlines()
+            text = ''.join(content)
+            print(text)
+            self.content.delete(1.0, END)
+            self.content.insert(END, text)
+            self.text_name.delete(0,END)
+            self.text_name.insert(END, ntpath.basename(self.file_name))
+        f.close()
+
+
+
+    # Templates
+    def add_template(self, template_type):
+        templates = ['<html>\n\t<head>\n\t\t<meta charset="utf-8">\n\t\t<title></title>\n\t</head>\n\t<body></body>\n\n</html>', #html
+                     '<?php\n\n\n\n\n?>', # php 
+                     '$(document).ready(function(){\n\n\n});\n', # jquery
+                     '#include<stdio.h>\n#include<stdlib.h>\n#include<math.h>\n\n\nint main(){\n\n\n\n\treturn 0;\n\n}', # C
+                     '#include<iostream>\n\nusing namespace std;\n\nint main(){\n\n\n\n\treturn 0;\n\n}', # C++
+                     'public class noname {\n\tpublic static void main(String[] args){\n\n\t}\n}' # Java
+                     ]
+
+        if template_type == 'HTML':
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+            self.content.insert(END,templates[0])
+            self.text_name.insert(END,'noname.html')
+
+        elif template_type == 'PHP':
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+            self.content.insert(END,templates[1])
+            self.text_name.insert(END,'noname.php')
+
+        elif template_type == 'JQUERY':
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+            self.content.insert(END,templates[2])
+            self.text_name.insert(END,'noname.js')
+
+        elif template_type == 'C':
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+            self.content.insert(END,templates[3])
+            self.text_name.insert(END,'noname.c')
+
+        elif template_type == 'C++':
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+            self.content.insert(END,templates[4])
+            self.text_name.insert(END,'noname.cpp')
+
+        elif template_type == 'JAVA':
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+            self.content.insert(END,templates[5])
+            self.text_name.insert(END,'noname.class')
+        else:
+            msg.showinfo('Template Message','Template not available')
+            self.text_name.delete(0, END)
+            self.content.delete(1.0,END)
+
+
+
+    def save_file(self):
+        choice = msg.askyesno('Content Message', 'Are you sure you want to save all text?')
+        if choice:
+
+            self.current = self.content.get(1.0,END)
+            saved_name = self.file_name.get()
+            saved_name = str(saved_name)
+            if saved_name:
+                if self.current != '' or len(self.current) > 10:
+                    if not os.path.exists(saved_name):
+                        with open(saved_name, 'w') as f:
+                            f.write(self.current)
+                        f.close()
+                        msg.showinfo('Save Message','Save Complete')
+                    elif os.path.exists(saved_name):
+                        with open(saved_name, 'a') as f:
+                            f.write(self.current)
+                        f.close()
+                        msg.showinfo('Save Message', 'Content saved')
+                else:
+                    msg.showinfo('Save Error', 'You need at least 10 characters to\nto successfully save content.')
+            else:
+                msg.showinfo('Name Error', 'No filename specified')
+            
+
+    def create_new(self): 
+        choice = msg.askyesno('Content Message', 'Are you sure you want to clear all text?')
+        if choice == True:
+            self.content.delete(1.0, END)
+            self.text_name.delete(0, END)
+            msg.showinfo('Content Message','Cleared!')
+        else:
+            msg.showinfo('Content Message','Canceled..')
+
+            
+
+
+
+app = Tk()
+obj = text_py(app)
+app.geometry('980x680')
+app.resizable(False, False)
+app.configure(background='black')
+app.title('BishopIDE - Bishop\'s Independent Development Environment')
+app.mainloop()
