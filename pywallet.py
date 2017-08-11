@@ -1,5 +1,5 @@
 from tkinter import *
-import tkinter.messagebox
+from tkinter import messagebox
 import matplotlib.pyplot as pt
 import os
 
