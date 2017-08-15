@@ -1,0 +1,105 @@
+import numpy as np
+
+def translate(file_name):
+    """Translate a DNA sequence based on a given template (table)
+    and return corresponding aminoacids using a list"""
+    table = {
+    'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M',
+    'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
+    'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K',
+    'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',
+    'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
+    'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
+    'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q',
+    'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
+    'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
+    'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
+    'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E',
+    'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
+    'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
+    'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L',
+    'TAC':'Y', 'TAT':'Y', 'TAA':'_', 'TAG':'_',
+    'TGC':'C', 'TGT':'C', 'TGA':'_', 'TGG':'W',
+    }
+    
+    with open(file_name, 'r') as f:
+        triplet = ''
+        data = f.read()
+        data = data.replace('\n','')
+        new_data = []
+        for item in list(data):
+            triplet += item
+            if len(triplet) == 3:
+                new_data.append(triplet)
+                triplet = ''
+
+        sequence = []
+        for item in table:
+            for trip in new_data:
+                if item == trip:
+                    sequence.append(table[item])
+        print(sequence)
+    f.close()
+    return sequence
+            
+
+def amino_count(data, file_name):
+    """Count aminoacids of a file
+    and extract frequencies"""
+    with open(file_name, 'r') as f:
+        data = f.read()
+        aminos = []
+        for letter in data:
+            if letter in 'IMQSW':
+                aminos.append(letter)
+        frequency = {}
+        for char in aminos:
+            frequency[char] = aminos.count(char)      
+    f.close()   
+    print(frequency)
+    return frequency
+
+
+def build_hist(data):
+    import matplotlib.pyplot as plt
+    normal = []
+    for item in data:
+        normal.append(data[item])
+    plt.hist(normal)
+    plt.xlabel('Frequency')
+    plt.ylabel('Aminoacid')
+    plt.show()
+
+
+dna_seq = 'dna_strand\strand.txt'
+aminos_seq = 'dna_strand/aminoacids.txt'
+data = translate(dna_seq)
+freq = amino_count(data, aminos_seq)
+build_hist(freq)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+
+
+    
